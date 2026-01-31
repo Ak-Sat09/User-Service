@@ -33,5 +33,9 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+     @GetMapping("/hello")
+    public String sayHello() {
+        return "Hello World";
+    }
    
 }
