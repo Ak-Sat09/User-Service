@@ -46,12 +46,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # 6️⃣ Build Docker image
-      - name: Build Docker image
-        run: docker build \
-              --build-arg DB_URL=${{ secrets.DB_URL }} \
-              --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} \
-              --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-              --tag 8398963836/userservices:latest .
+     - name: Build Docker image
+  run: docker build --build-arg DB_URL=${{ secrets.DB_URL }} --build-arg DB_USERNAME=${{ secrets.DB_USERNAME }} --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }} --tag 8398963836/userservices:latest .
 
       # 7️⃣ Push Docker image to Docker Hub
       - name: Push Docker image
