@@ -24,17 +24,22 @@ public class JwtUtils {
     public JwtUtils() {
         this.key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     } 
-    public String generateToken(String email, String userId) {
+
+    // Generate token with email, userId, and name
+    public String generateToken(String email, String userId, String name) {
         return Jwts.builder()
                 .setSubject(email) // email as subject
                 .addClaims(Map.of(
-                        "userId", userId
+                        "userId", userId,
+                        "name", name       // included name
                 ))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     } 
+
+    // Validate token
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -46,7 +51,8 @@ public class JwtUtils {
             return false;
         }
     }
- 
+
+    // Get email (subject) from token
     public String getEmailFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -56,7 +62,7 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    
+    // Get userId from token
     public String getUserIdFromToken(String token) {
         return (String) Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -64,5 +70,15 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody()
                 .get("userId");
+    }
+
+    // Get name from token
+    public String getNameFromToken(String token) {
+        return (String) Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("name");
     }
 }
